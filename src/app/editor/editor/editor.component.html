@@ -1,3 +1,14 @@
-<input [(ngModel)]="utf8string">
+<div *ngIf="mode === 'enter'">
+  <textarea [(ngModel)]="utf8string">
+  </textarea>
+  <button (click)="exitEditMode()">Save</button>
+</div>
 
-<p>{{ utf8string }}</p>
+<div *ngIf="mode === 'tag'">
+  <div>
+    <p>{{ utf8string }}</p>
+  </div>
+  <button (click)="getSelectionText()">Tag</button>
+</div>
+
+<div [innerHtml]="formattedText"></div>
