@@ -18,7 +18,7 @@ export class ViewerComponent implements OnChanges {
       { 'start': 14, 'end': 16, 'tag': 'b' }
     ];
     */
-  viewText: string;
+  viewText: SafeHtml;
   nonOverlappingText: SafeHtml;
 
   constructor(private sanitized: DomSanitizer) { }
@@ -30,7 +30,7 @@ export class ViewerComponent implements OnChanges {
     }
   }
 
-  createViewText(t: string, s: Array<any>): string {
+  createViewText(t: string, s: Array<any>): SafeHtml {
 
     let breakingPoints = new Set([0, t.length]);
     let vt = '';
@@ -52,13 +52,16 @@ export class ViewerComponent implements OnChanges {
           vt = vt + '<' + s[ j ]['tag'] + '>';
         }
       }
-      vt = vt + t.substring(breakingPointList[i], breakingPointList[i + 1]);
+      vt = vt + t.substring(breakingPointList[i], breakingPointList[i + 1])
+        .replace('&', '&amp;')
+        .replace('<', '&lt;')
+        .replace('>', '&gt;');
 
     }
-    return vt;
+    return this.sanitized.bypassSecurityTrustHtml(vt);
   }
 
-  createNonOverlappingText(t: string, s: Array<any>) {
+  createNonOverlappingText(t: string, s: Array<any>): SafeHtml {
 
     let breakingPoints = new Set([0, t.length]);
     let vt = '';
