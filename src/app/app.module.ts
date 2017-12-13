@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { EditorModule } from './editor/editor.module';
+import { ViewerModule } from './viewer/viewer.module';
 
 @NgModule({
   declarations: [

@@ -9,6 +9,10 @@
     <p>{{ utf8string }}</p>
   </div>
   <button (click)="getSelectionText()">Tag</button>
+  <button (click)="editText()">Edit</button>
 </div>
 
-<div [innerHtml]="formattedText"></div>
+<app-viewer *ngIf="mode === 'tag'"
+            [text]="utf8string"
+            [standoffs]="[{'start': startIndex, 'end': endIndex, 'tag': 'b'}]">
+</app-viewer>
