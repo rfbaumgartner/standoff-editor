@@ -8,16 +8,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class ViewerComponent implements OnChanges {
 
-  @Input() text: string; // = 'Geht es mit überschneidenden Annotationen?';
+  @Input() text: string;
   @Input() standoffs: Array<any>;
-  /*=
-    [
-      { 'start': 0, 'end': 4, 'tag': 'i' },
-      { 'start': 2, 'end': 6, 'tag': 'b' },
-      { 'start': 10, 'end': 14, 'tag': 'i' },
-      { 'start': 14, 'end': 16, 'tag': 'b' }
-    ];
-    */
   viewText: SafeHtml;
   nonOverlappingText: SafeHtml;
 

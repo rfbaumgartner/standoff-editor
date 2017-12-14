@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { stringDistance } from 'codelyzer/util/utils';
 
 @Component({
   selector: 'app-editor',
@@ -9,30 +10,10 @@ export class EditorComponent implements OnInit {
 
   mode: string = 'enter';
   utf8string: string;
-  selectedString: string;
-  startIndex: number;
-  endIndex: number;
+  standoffs: Array<any> = [];
   constructor() { }
 
   ngOnInit() {
-  }
-
-  getSelectionText() {
-    let text = '';
-    let start = 0;
-    let length = 0;
-    if (window.getSelection) {
-      text = window.getSelection().toString();
-      start = window.getSelection().anchorOffset;
-      length = text.length;
-    }
-    if (this.utf8string.substring(start, start + length) === text) {
-      this.selectedString = text;
-      this.startIndex = start;
-      this.endIndex = start + length;
-    }
-
-    alert('New standoff annotation <<' + this.selectedString + '>>, from index ' + this.startIndex + ' to ' + this.endIndex);
   }
 
   exitEditMode() {
@@ -41,5 +22,35 @@ export class EditorComponent implements OnInit {
 
   editText() {
     this.mode = 'enter';
+  }
+
+  annotateWithTag(selectedTag: string) {
+    let s = this.getStandoffOfSelected(selectedTag);
+    this.standoffs.push(s);
+    this.standoffs = this.standoffs.slice();
+    // this.getSelectionText();
+    // this.tag = selectedTag;
+    alert('New standoff annotation of type <<' + s['tag'] + '>> around <<'
+      + this.utf8string.substring(s['start'], s['end']) + '>>, from index ' + s['start'] + ' to ' + s['end']);
+  }
+
+  getStandoffOfSelected(tag: string) {
+    let text = '';
+    let start = 0;
+    let length = 0;
+    let iri = '0';
+    if (window.getSelection) {
+      text = window.getSelection().toString();
+      start = window.getSelection().anchorOffset;
+      length = text.length;
+      iri = Math.random().toString();
+    }
+    return {'start': start, 'end': start + length, 'tag': tag, 'iri': iri};
+  }
+
+  deleteTag(iri: string) {
+    this.standoffs = this.standoffs.filter(function (item: any) {
+      return item['iri'] !== iri;
+    });
   }
 }

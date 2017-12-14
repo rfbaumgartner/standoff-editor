@@ -8,11 +8,18 @@
   <div>
     <p>{{ utf8string }}</p>
   </div>
-  <button (click)="getSelectionText()">Tag</button>
+  <button (click)="annotateWithTag('b')">Bold</button>
+  <button (click)="annotateWithTag('i')">Italic</button>
   <button (click)="editText()">Edit</button>
 </div>
 
 <app-viewer *ngIf="mode === 'tag'"
             [text]="utf8string"
-            [standoffs]="[{'start': startIndex, 'end': endIndex, 'tag': 'b'}]">
+            [standoffs]="standoffs">
 </app-viewer>
+
+<app-standoff-list *ngIf="mode === 'tag'"
+                   [text]="utf8string"
+                   [standoffs]="standoffs"
+                   (deleteTag)="deleteTag($event)">
+</app-standoff-list>

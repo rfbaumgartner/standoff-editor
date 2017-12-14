@@ -1,0 +1,40 @@
+<h4>
+  Standoff elements
+</h4>
+<table>
+  <tr>
+    <th>
+      Annotated text
+    </th>
+    <th>
+      Tag
+    </th>
+    <th>
+      Start
+    </th>
+    <th>
+      End
+    </th>
+    <th>
+      Actions
+    </th>
+  </tr>
+
+  <tr *ngFor="let s of standoffs">
+    <td>
+      {{ text.substring(s['start'], s['end']) }}
+    </td>
+    <td>
+      {{ s['tag'] }}
+    </td>
+    <td>
+      {{ s['start'] }}
+    </td>
+    <td>
+      {{ s['end'] }}
+    </td>
+    <td>
+      <button (click)="deleteTag.emit(s['iri'])">Delete</button>
+    </td>
+  </tr>
+</table>
