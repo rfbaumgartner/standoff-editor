@@ -77,6 +77,10 @@ export class ViewerComponent implements OnChanges {
               styles = styles + 'font-style: italic;';
               break;
             }
+            case 'ref': {
+              styles = styles + 'background-color: cornflowerblue;';
+              break;
+            }
           }
         }
       }

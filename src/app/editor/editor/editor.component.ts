@@ -31,8 +31,20 @@ export class EditorComponent implements OnInit {
       this.standoffs = this.standoffs.slice();
       // this.getSelectionText();
       // this.tag = selectedTag;
-      alert('New standoff annotation of type <<' + s['tag'] + '>> around <<'
+      alert('New standoff annotation of type <<' + s['tag'] + '>> \naround <<'
         + this.utf8string.substring(s['start'], s['end']) + '>>, from index ' + s['start'] + ' to ' + s['end']);
+    }
+  }
+
+  annotateLinked(property: string) {
+    let s = this.getStandoffOfSelected('ref');
+    if (s) {
+      s['obj'] = this.utf8string.substring(s['start'], s['end']);
+      s['prop'] = property;
+      this.standoffs.push(s);
+      this.standoffs = this.standoffs.slice();
+      alert('New index link from index ' + s['start'] + ' to ' + s['end'] + '\n Search for <<'
+        + this.utf8string.substring(s['start'], s['end']) + '>>');
     }
   }
 
