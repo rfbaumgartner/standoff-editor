@@ -6,7 +6,7 @@
 
 <div *ngIf="mode === 'tag'">
   <div>
-    <p>{{ utf8string }}</p>
+    <p id="annotation_view">{{ utf8string }}</p>
   </div>
   <button (click)="annotateWithTag('b')">Bold</button>
   <button (click)="annotateWithTag('i')">Italic</button>

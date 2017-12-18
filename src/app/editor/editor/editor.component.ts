@@ -26,12 +26,14 @@ export class EditorComponent implements OnInit {
 
   annotateWithTag(selectedTag: string) {
     let s = this.getStandoffOfSelected(selectedTag);
-    this.standoffs.push(s);
-    this.standoffs = this.standoffs.slice();
-    // this.getSelectionText();
-    // this.tag = selectedTag;
-    alert('New standoff annotation of type <<' + s['tag'] + '>> around <<'
-      + this.utf8string.substring(s['start'], s['end']) + '>>, from index ' + s['start'] + ' to ' + s['end']);
+    if (s) {
+      this.standoffs.push(s);
+      this.standoffs = this.standoffs.slice();
+      // this.getSelectionText();
+      // this.tag = selectedTag;
+      alert('New standoff annotation of type <<' + s['tag'] + '>> around <<'
+        + this.utf8string.substring(s['start'], s['end']) + '>>, from index ' + s['start'] + ' to ' + s['end']);
+    }
   }
 
   getStandoffOfSelected(tag: string) {
@@ -39,13 +41,15 @@ export class EditorComponent implements OnInit {
     let start = 0;
     let length = 0;
     let iri = '0';
-    if (window.getSelection) {
+    if (window.getSelection().anchorNode.parentNode['id']  === 'annotation_view' && window.getSelection().toString().length > 0) {
       text = window.getSelection().toString();
       start = window.getSelection().anchorOffset;
       length = text.length;
       iri = Math.random().toString();
+      return {'start': start, 'end': start + length, 'tag': tag, 'iri': iri};
+    } else {
+      return null;
     }
-    return {'start': start, 'end': start + length, 'tag': tag, 'iri': iri};
   }
 
   deleteTag(iri: string) {
