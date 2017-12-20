@@ -1,47 +1,69 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Subscription } from 'rxjs/Subscription';
+import { Standoff } from '../../core/standoff';
+import { StandoffService } from '../../core/standoff.service';
 
 @Component({
   selector: 'app-viewer',
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.css']
 })
-export class ViewerComponent implements OnChanges {
+export class ViewerComponent implements OnInit, OnDestroy {
 
-  @Input() text: string;
-  @Input() standoffs: Array<any>;
+  standoffs: Array<Standoff>;
+  text: string;
+  private textSubscription: Subscription;
+  private standoffSubscription: Subscription;
+
   viewText: SafeHtml;
   nonOverlappingText: SafeHtml;
 
-  constructor(private sanitized: DomSanitizer) { }
+  constructor(private sanitized: DomSanitizer, private standoffService: StandoffService) { }
 
-  ngOnChanges() {
-    if (this.text && this.standoffs) {
-      this.viewText = this.createViewText(this.text, this.standoffs);
-      this.nonOverlappingText = this.createNonOverlappingText(this.text, this.standoffs);
-    }
+  ngOnInit() {
+    this.textSubscription = this.standoffService.getText()
+      .subscribe((t: string) => {
+        this.text = t;
+      });
+
+    this.standoffSubscription = this.standoffService.getStandoffs()
+      .subscribe((s: Array<Standoff>) => {
+        this.standoffs = s;
+
+        if (this.text && this.standoffs) {
+
+          this.viewText = this.createNonOverlappingText(this.text, this.standoffs);
+        }
+      });
   }
 
-  createViewText(t: string, s: Array<any>): SafeHtml {
+  ngOnDestroy() {
+    this.textSubscription.unsubscribe();
+    this.standoffSubscription.unsubscribe();
+  }
 
-    let breakingPoints = new Set([0, t.length]);
+  /*
+  createViewText(t: string, s: Array<Standoff>): SafeHtml {
+
+    const breakingPoints = new Set([0, t.length]);
     let vt = '';
 
     for (let i = 0; i < s.length; i++) {
-      breakingPoints.add(s[i]['start']);
-      breakingPoints.add(s[i]['end']);
+      breakingPoints.add(s[i].startIndex);
+      breakingPoints.add(s[i].endIndex);
     }
-    let breakingPointList: number[] = Array.from(breakingPoints).sort((n1: number, n2: number) => n1 - n2);
+    const breakingPointList: number[] = Array.from(breakingPoints).sort((n1: number, n2: number) => n1 - n2);
 
     for (let i = 0; i + 1 < breakingPointList.length; i++) {
       for (let j = 0; j < s.length; j++) {
-        if (breakingPointList[ i ] === s[ j ][ 'end' ]) {
-          vt = vt + '</' + s[ j ][ 'tag' ] + '>';
+        if (breakingPointList[ i ] === s[ j ].endIndex) {
+          vt = vt + '</' + s[ j ].tag + '>';
         }
       }
       for (let j = 0; j < s.length; j++) {
-        if (breakingPointList[ i ] === s[ j ]['start']) {
-          vt = vt + '<' + s[ j ]['tag'] + '>';
+        if (breakingPointList[ i ] === s[ j ].startIndex) {
+          vt = vt + '<' + s[ j ].tag + '>';
         }
       }
       vt = vt + t.substring(breakingPointList[i], breakingPointList[i + 1])
@@ -52,23 +74,24 @@ export class ViewerComponent implements OnChanges {
     }
     return this.sanitized.bypassSecurityTrustHtml(vt);
   }
+  */
 
-  createNonOverlappingText(t: string, s: Array<any>): SafeHtml {
+  createNonOverlappingText(t: string, s: Array<Standoff>): SafeHtml {
 
-    let breakingPoints = new Set([0, t.length]);
+    const breakingPoints = new Set([0, t.length]);
     let vt = '';
 
     for (let i = 0; i < s.length; i++) {
-      breakingPoints.add(s[ i ]['start']);
-      breakingPoints.add(s[ i ]['end']);
+      breakingPoints.add(s[ i ].startIndex);
+      breakingPoints.add(s[ i ].endIndex);
     }
-    let breakingPointList: number[] = Array.from(breakingPoints).sort((n1: number, n2: number) => n1 - n2);
+    const breakingPointList: number[] = Array.from(breakingPoints).sort((n1: number, n2: number) => n1 - n2);
 
     for (let i = 0; i + 1 < breakingPointList.length; i++) {
       let styles: string = '';
       for (let j = 0; j < s.length; j++) {
-        if ( s[ j ][ 'start' ] <= breakingPointList[ i ] && breakingPointList[ i + 1 ] <= s[ j ][ 'end' ]) {
-          switch (s[j]['tag']) {
+        if ( s[ j ].startIndex <= breakingPointList[ i ] && breakingPointList[ i + 1 ] <= s[ j ].endIndex) {
+          switch (s[j].tag) {
             case 'b': {
               styles = styles + 'font-weight: bold;';
               break;

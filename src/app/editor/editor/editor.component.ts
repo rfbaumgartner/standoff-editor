@@ -1,22 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import { stringDistance } from 'codelyzer/util/utils';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+import { Standoff } from '../../core/standoff';
+import { StandoffService } from '../../core/standoff.service';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.css']
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, OnDestroy {
 
   mode: string = 'enter';
-  utf8string: string;
-  standoffs: Array<any> = [];
-  constructor() { }
+  text: string;
+  private textSubscription: Subscription;
+
+  constructor(private standoffService: StandoffService) { }
 
   ngOnInit() {
+    this.textSubscription =
+    this.standoffService.getText()
+      .subscribe((t: string) => {
+        this.text = t;
+      });
+  }
+
+  ngOnDestroy() {
+    this.textSubscription.unsubscribe();
   }
 
   exitEditMode() {
+    this.standoffService.postText(this.text);
     this.mode = 'tag';
   }
 
@@ -25,48 +38,41 @@ export class EditorComponent implements OnInit {
   }
 
   annotateWithTag(selectedTag: string) {
-    let s = this.getStandoffOfSelected(selectedTag);
-    if (s) {
-      this.standoffs.push(s);
-      this.standoffs = this.standoffs.slice();
-      // this.getSelectionText();
-      // this.tag = selectedTag;
-      alert('New standoff annotation of type <<' + s['tag'] + '>> \naround <<'
-        + this.utf8string.substring(s['start'], s['end']) + '>>, from index ' + s['start'] + ' to ' + s['end']);
+    let selection: Selection = this.getStandoffOfSelected();
+    if (selection) {
+      let standoff = new Standoff();
+      standoff.startIndex = selection.anchorOffset;
+      standoff.endIndex = selection.anchorOffset + selection.toString().length;
+      standoff.tag = selectedTag;
+      standoff.iri = Math.random().toString();
+      alert('New standoff annotation of type <<' + standoff['tag'] + '>> \naround <<'
+        + this.text.substring(standoff.startIndex, standoff.endIndex) + '>>, from index '
+        + standoff.startIndex + ' to ' + standoff.endIndex);
+      this.standoffService.postStandoff(standoff);
     }
   }
 
   annotateLinked(property: string) {
-    let s = this.getStandoffOfSelected('ref');
-    if (s) {
-      s['obj'] = this.utf8string.substring(s['start'], s['end']);
-      s['prop'] = property;
-      this.standoffs.push(s);
-      this.standoffs = this.standoffs.slice();
-      alert('New index link from index ' + s['start'] + ' to ' + s['end'] + '\n Search for <<'
-        + this.utf8string.substring(s['start'], s['end']) + '>>');
+    let selection: Selection = this.getStandoffOfSelected();
+    if (selection) {
+      let standoff = new Standoff();
+      standoff.startIndex = selection.anchorOffset;
+      standoff.endIndex = selection.anchorOffset + selection.toString().length;
+      standoff.tag = 'ref';
+      standoff.iri = Math.random().toString();
+      standoff.linkIRI = this.text.substring(standoff.startIndex, standoff.endIndex);
+      standoff.propertyName = property;
+      alert('New index link from index ' + standoff.startIndex + ' to ' + standoff.endIndex + '\n Search for <<'
+        + this.text.substring(standoff.startIndex, standoff.endIndex) + '>>');
+      this.standoffService.postStandoff(standoff);
     }
   }
 
-  getStandoffOfSelected(tag: string) {
-    let text = '';
-    let start = 0;
-    let length = 0;
-    let iri = '0';
+  getStandoffOfSelected(): Selection {
     if (window.getSelection().anchorNode.parentNode['id']  === 'annotation_view' && window.getSelection().toString().length > 0) {
-      text = window.getSelection().toString();
-      start = window.getSelection().anchorOffset;
-      length = text.length;
-      iri = Math.random().toString();
-      return {'start': start, 'end': start + length, 'tag': tag, 'iri': iri};
+      return window.getSelection();
     } else {
       return null;
     }
-  }
-
-  deleteTag(iri: string) {
-    this.standoffs = this.standoffs.filter(function (item: any) {
-      return item['iri'] !== iri;
-    });
   }
 }

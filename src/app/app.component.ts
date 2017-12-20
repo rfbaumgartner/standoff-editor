@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { StandoffService } from './core/standoff.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'How to edit standoff';
+
+  constructor(private standoffService: StandoffService) {}
 }

@@ -1,12 +1,12 @@
 <div *ngIf="mode === 'enter'">
-  <textarea [(ngModel)]="utf8string">
+  <textarea [(ngModel)]="text">
   </textarea>
   <button (click)="exitEditMode()">Save</button>
 </div>
 
 <div *ngIf="mode === 'tag'">
   <div>
-    <p id="annotation_view">{{ utf8string }}</p>
+    <p id="annotation_view">{{ text }}</p>
   </div>
   <button (click)="annotateWithTag('b')">Bold</button>
   <button (click)="annotateWithTag('i')">Italic</button>
@@ -14,13 +14,8 @@
   <button (click)="editText()">Edit</button>
 </div>
 
-<app-viewer *ngIf="mode === 'tag'"
-            [text]="utf8string"
-            [standoffs]="standoffs">
+<app-viewer *ngIf="mode === 'tag'">
 </app-viewer>
 
-<app-standoff-list *ngIf="mode === 'tag'"
-                   [text]="utf8string"
-                   [standoffs]="standoffs"
-                   (deleteTag)="deleteTag($event)">
+<app-standoff-list *ngIf="mode === 'tag'">
 </app-standoff-list>

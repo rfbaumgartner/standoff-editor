@@ -28,25 +28,27 @@
 
   <tr *ngFor="let s of standoffs">
     <td>
-      {{ text.substring(s['start'], s['end']) }}
+     <!-- {{ text.substring(s.startIndex, s.endIndex) }} -->
     </td>
     <td>
-      {{ s['tag'] }}
+      {{ s.tag }}
     </td>
     <td>
-      {{ s['prop'] }}
+      {{ s.propertyName }}
     </td>
     <td>
-      {{ s['obj'] }}
+      -
     </td>
     <td>
-      {{ s['start'] }}
+      {{ s.startIndex }}
     </td>
     <td>
-      {{ s['end'] }}
+      {{ s.endIndex }}
     </td>
     <td>
-      <button (click)="deleteTag.emit(s['iri'])">Delete</button>
+      <button (click)="deleteTag(s.iri)">Delete</button>
     </td>
+
+    <!-- FIXME variable not updating after variable changes -->
   </tr>
 </table>

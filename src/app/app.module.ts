@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import { CoreModule } from './core/core.module';
+import { StandoffService } from './core/standoff.service';
 import { EditorModule } from './editor/editor.module';
-import { ViewerModule } from './viewer/viewer.module';
 
 @NgModule({
   declarations: [
@@ -13,11 +14,12 @@ import { ViewerModule } from './viewer/viewer.module';
   ],
   imports: [
     BrowserModule,
+    CoreModule,
     EditorModule,
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [StandoffService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
