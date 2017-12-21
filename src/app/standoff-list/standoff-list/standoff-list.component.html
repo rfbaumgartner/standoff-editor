@@ -28,7 +28,7 @@
 
   <tr *ngFor="let s of standoff">
     <td>
-     <!-- {{ text.substring(s.startIndex, s.endIndex) }} -->
+      {{ text.substring(s.startIndex, s.endIndex) }}
     </td>
     <td>
       {{ s.tag }}
@@ -37,7 +37,7 @@
       {{ s.propertyName }}
     </td>
     <td>
-      -
+      {{ s.linkIRI }}
     </td>
     <td>
       {{ s.startIndex }}
