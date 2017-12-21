@@ -16,7 +16,7 @@ export class ViewerComponent implements OnInit, OnDestroy {
   private textSubscription: Subscription;
   private standoffSubscription: Subscription;
 
-  viewText: SafeHtml;
+  // viewText: SafeHtml;
   nonOverlappingText: SafeHtml;
 
   constructor(private sanitized: DomSanitizer, private standoffService: StandoffService) { }
@@ -33,7 +33,7 @@ export class ViewerComponent implements OnInit, OnDestroy {
 
         if (this.text && this.standoffs) {
 
-          this.viewText = this.createNonOverlappingText(this.text, this.standoffs);
+          this.nonOverlappingText = this.createNonOverlappingText(this.text, this.standoffs);
         }
       });
   }
