@@ -62,8 +62,10 @@ export class EditorComponent implements OnInit, OnDestroy {
       standoff.iri = Math.random().toString();
       standoff.linkIRI = this.text.substring(standoff.startIndex, standoff.endIndex);
       standoff.propertyName = property;
-      alert('New index link from index ' + standoff.startIndex + ' to ' + standoff.endIndex + '\n Search for <<'
-        + this.text.substring(standoff.startIndex, standoff.endIndex) + '>>');
+      alert('New index link from index ' + standoff.startIndex + ' to ' + standoff.endIndex
+        + ' \nIn the full app it would now search for a ' + standoff.propertyName + '\n'
+        + 'with the name <<' + this.text.substring(standoff.startIndex, standoff.endIndex) + '>>.\n'
+        + 'Alternatively you could search for another one or create one.');
       this.standoffService.postStandoff(standoff);
     }
   }
