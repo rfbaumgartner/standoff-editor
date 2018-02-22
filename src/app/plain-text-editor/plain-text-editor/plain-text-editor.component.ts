@@ -1,35 +1,37 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
-import { StandoffService } from '../../core/standoff.service';
+import { ParamsService } from '../../core/params.service';
+import { TextService } from '../../core/text.service';
 
 @Component({
   selector: 'app-plain-text-editor',
   templateUrl: './plain-text-editor.component.html',
   styleUrls: ['./plain-text-editor.component.css']
 })
-export class PlainTextEditorComponent implements OnInit, OnDestroy {
+export class PlainTextEditorComponent implements OnInit {
 
   text: string;
+  resIRI: string;
+  projIRI: string;
 
-  private textSubscription: Subscription;
-
-  constructor(private standoffService: StandoffService, private router: Router) { }
+  constructor(
+    private textService: TextService,
+    private paramsService: ParamsService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    this.textSubscription =
-      this.standoffService.getText()
-        .subscribe((t: string) => {
-          this.text = t;
-        });
-  }
+    this.text = this.textService.getText();
+    this.resIRI = this.paramsService.getResourceIRI();
+    this.projIRI = this.paramsService.getProjectIRI();
 
-  ngOnDestroy() {
-    this.textSubscription.unsubscribe();
+    if (this.projIRI === undefined || this.resIRI === undefined) {
+      this.router.navigate(['/']);
+    }
   }
 
   exitEditMode() {
-    this.standoffService.postText(this.text);
+    this.textService.postText(this.text);
     this.router.navigate(['/standoff']);
   }
 

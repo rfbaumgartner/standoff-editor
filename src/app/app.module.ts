@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { ParamsService } from './core/params.service';
 import { StandoffService } from './core/standoff.service';
+import { TextService } from './core/text.service';
 import { EditorModule } from './editor/editor.module';
 import { PlainTextEnterViewModule } from './plain-text-enter-view/plain-text-enter-view.module';
 import { ResSelectorViewModule } from './res-selector-view/res-selector-view.module';
@@ -30,7 +31,7 @@ import { StandoffListComponent } from './standoff-list/standoff-list/standoff-li
     RouterModule.forRoot([    ]),
     StandoffEditViewModule
   ],
-  providers: [StandoffService, ParamsService],
+  providers: [StandoffService, ParamsService, TextService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

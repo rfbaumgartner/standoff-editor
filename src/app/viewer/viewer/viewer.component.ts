@@ -3,6 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Subscription } from 'rxjs/Subscription';
 import { Standoff } from '../../core/standoff';
 import { StandoffService } from '../../core/standoff.service';
+import { TextService } from '../../core/text.service';
 
 @Component({
   selector: 'app-viewer',
@@ -13,19 +14,15 @@ export class ViewerComponent implements OnInit, OnDestroy {
 
   standoffs: Array<Standoff>;
   text: string;
-  private textSubscription: Subscription;
   private standoffSubscription: Subscription;
 
   // viewText: SafeHtml;
   nonOverlappingText: SafeHtml;
 
-  constructor(private sanitized: DomSanitizer, private standoffService: StandoffService) { }
+  constructor(private sanitized: DomSanitizer, private standoffService: StandoffService, private textService: TextService) { }
 
   ngOnInit() {
-    this.textSubscription = this.standoffService.getText()
-      .subscribe((t: string) => {
-        this.text = t;
-      });
+    this.text = this.textService.getText();
 
     this.standoffSubscription = this.standoffService.getStandoffs()
       .subscribe((s: Array<Standoff>) => {
@@ -39,7 +36,6 @@ export class ViewerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.textSubscription.unsubscribe();
     this.standoffSubscription.unsubscribe();
   }
 

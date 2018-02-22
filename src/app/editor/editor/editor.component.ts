@@ -1,31 +1,40 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { ParamsService } from '../../core/params.service';
 import { Standoff } from '../../core/standoff';
 import { StandoffService } from '../../core/standoff.service';
+import { TextService } from '../../core/text.service';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.css']
 })
-export class EditorComponent implements OnInit, OnDestroy {
+export class EditorComponent implements OnInit {
 
   text: string;
-  private textSubscription: Subscription;
+  resIRI: string;
+  projIRI: string;
 
-  constructor(private standoffService: StandoffService, private router: Router) { }
+  constructor(
+    private standoffService: StandoffService,
+    private textService: TextService,
+    private paramsService: ParamsService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    this.textSubscription =
-    this.standoffService.getText()
-      .subscribe((t: string) => {
-        this.text = t;
-      });
-  }
+    this.text = this.textService.getText();
+    this.resIRI = this.paramsService.getResourceIRI();
+    this.projIRI = this.paramsService.getProjectIRI();
 
-  ngOnDestroy() {
-    this.textSubscription.unsubscribe();
+    if (this.text === undefined) {
+      this.router.navigate(['/text']);
+    }
+
+    if (this.projIRI === undefined || this.resIRI === undefined) {
+      this.router.navigate(['/']);
+    }
   }
 
   editText() {

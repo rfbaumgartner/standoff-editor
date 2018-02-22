@@ -1,17 +1,21 @@
 <div>
-  <div>
-    <p id="annotation_view">{{ text }}</p>
+  <div style="display: inline-block">
+    <div>
+      <p id="annotation_view">{{ text }}</p>
+    </div>
+    <button (click)="annotateWithTag('b')">Bold</button>
+    <button (click)="annotateWithTag('i')">Italic</button>
+    <button (click)="annotateLinked('city')">Set link to city</button>
+    <button (click)="annotateLinked('person')">Set link to person</button>
+
+    <button (click)="editText()">Edit</button>
   </div>
-  <button (click)="annotateWithTag('b')">Bold</button>
-  <button (click)="annotateWithTag('i')">Italic</button>
-  <button (click)="annotateLinked('city')">Set link to city</button>
-  <button (click)="annotateLinked('person')">Set link to person</button>
 
-  <button (click)="editText()">Edit</button>
+  <div style="display: inline-block">
+    <app-viewer>
+    </app-viewer>
+  </div>
 </div>
-
-<app-viewer>
-</app-viewer>
 
 <app-standoff-list>
 </app-standoff-list>

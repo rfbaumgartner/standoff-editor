@@ -18,4 +18,12 @@ export class ParamsService {
     this.resourceIRI = 'TODO';
   }
 
+  getProjectIRI(): string {
+    return this.projectIRI;
+  }
+
+  getResourceIRI(): string {
+    return this.resourceIRI;
+  }
+
 }
