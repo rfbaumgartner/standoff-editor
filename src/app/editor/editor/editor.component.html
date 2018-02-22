@@ -1,10 +1,4 @@
-<div *ngIf="mode === 'enter'">
-  <textarea [(ngModel)]="text">
-  </textarea>
-  <button (click)="exitEditMode()">Save</button>
-</div>
-
-<div *ngIf="mode === 'tag'">
+<div>
   <div>
     <p id="annotation_view">{{ text }}</p>
   </div>
@@ -16,8 +10,8 @@
   <button (click)="editText()">Edit</button>
 </div>
 
-<app-viewer *ngIf="mode === 'tag'">
+<app-viewer>
 </app-viewer>
 
-<app-standoff-list *ngIf="mode === 'tag'">
+<app-standoff-list>
 </app-standoff-list>

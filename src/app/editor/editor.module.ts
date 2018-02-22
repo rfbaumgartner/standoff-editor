@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { StandoffListModule } from '../standoff-list/standoff-list.module';
 import { ViewerModule } from '../viewer/viewer.module';
 import { EditorComponent } from './editor/editor.component';
@@ -9,6 +10,9 @@ import { EditorComponent } from './editor/editor.component';
   imports: [
     CommonModule,
     FormsModule,
+    RouterModule.forChild([
+      { path: 'edit', component: EditorComponent }
+    ]),
     StandoffListModule,
     ViewerModule
   ],

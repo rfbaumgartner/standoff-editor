@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ParamsService } from './core/params.service';
 import { StandoffService } from './core/standoff.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { StandoffService } from './core/standoff.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'How to edit standoff';
+  title = 'Standoff editor';
 
-  constructor(private standoffService: StandoffService) {}
+  constructor(private standoffService: StandoffService, private paramsService: ParamsService) {}
 }

@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { Standoff } from '../../core/standoff';
 import { StandoffService } from '../../core/standoff.service';
@@ -10,11 +11,10 @@ import { StandoffService } from '../../core/standoff.service';
 })
 export class EditorComponent implements OnInit, OnDestroy {
 
-  mode: string = 'enter';
   text: string;
   private textSubscription: Subscription;
 
-  constructor(private standoffService: StandoffService) { }
+  constructor(private standoffService: StandoffService, private router: Router) { }
 
   ngOnInit() {
     this.textSubscription =
@@ -28,19 +28,14 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.textSubscription.unsubscribe();
   }
 
-  exitEditMode() {
-    this.standoffService.postText(this.text);
-    this.mode = 'tag';
-  }
-
   editText() {
-    this.mode = 'enter';
+    this.router.navigate(['/text']);
   }
 
   annotateWithTag(selectedTag: string) {
-    let selection: Selection = this.getStandoffOfSelected();
+    const selection: Selection = this.getStandoffOfSelected();
     if (selection) {
-      let standoff = new Standoff();
+      const standoff = new Standoff();
       standoff.startIndex = selection.anchorOffset;
       standoff.endIndex = selection.anchorOffset + selection.toString().length;
       standoff.tag = selectedTag;
@@ -53,9 +48,9 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   annotateLinked(property: string) {
-    let selection: Selection = this.getStandoffOfSelected();
+    const selection: Selection = this.getStandoffOfSelected();
     if (selection) {
-      let standoff = new Standoff();
+      const standoff = new Standoff();
       standoff.startIndex = selection.anchorOffset;
       standoff.endIndex = selection.anchorOffset + selection.toString().length;
       standoff.tag = 'ref';
