@@ -1,6 +1,6 @@
 <div>
   <p>Enter project IRI</p>
-  <input [(ngModel)]="projectIri"><button (click)="setProjectIRI()">ok</button>
+  <input [(ngModel)]="projectIRI"><button (click)="setProjectIRI()">ok</button>
 </div>
 
 <div>
@@ -8,3 +8,5 @@
   <input [(ngModel)]="resourceAlias"><button (click)="setResource()">ok</button>
 </div>
 
+<p>Project: {{ GlobalProjectIRI }}</p>
+<p>Resource: {{ GlobalResourceIRI }}</p>

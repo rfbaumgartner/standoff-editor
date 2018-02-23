@@ -8,8 +8,11 @@ import { ParamsService } from '../../core/params.service';
 })
 export class ResSelectorComponent implements OnInit {
 
-  projectIri: string;
+  projectIRI: string;
   resourceAlias: string;
+
+  GlobalResourceIRI: string;
+  GlobalProjectIRI: string;
 
   constructor(private paramsService: ParamsService) { }
 
@@ -17,11 +20,13 @@ export class ResSelectorComponent implements OnInit {
   }
 
   setProjectIRI() {
-    this.paramsService.setProjectIRI(this.projectIri);
+    this.paramsService.setProjectIRI(this.projectIRI);
+    this.GlobalProjectIRI = this.paramsService.getProjectIRI();
   }
 
   setResource() {
     this.paramsService.setResource(this.resourceAlias);
+    this.GlobalResourceIRI = this.paramsService.getResourceIRI();
   }
 
 }
