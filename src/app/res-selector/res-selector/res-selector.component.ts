@@ -8,7 +8,7 @@ import { ParamsService } from '../../core/params.service';
 })
 export class ResSelectorComponent implements OnInit {
 
-  projectIRI: string;
+  projectIRI: string = 'http://rdfh.ch/projects/anything';
   resourceAlias: string;
 
   GlobalResourceIRI: string;
