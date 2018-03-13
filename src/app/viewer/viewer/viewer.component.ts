@@ -22,7 +22,7 @@ export class ViewerComponent implements OnInit, OnDestroy {
   constructor(private sanitized: DomSanitizer, private standoffService: StandoffService, private textService: TextService) { }
 
   ngOnInit() {
-    this.text = this.textService.getText();
+    this.textService.getText().subscribe(res => this.text = res);
 
     this.standoffSubscription = this.standoffService.getStandoffs()
       .subscribe((s: Array<Standoff>) => {

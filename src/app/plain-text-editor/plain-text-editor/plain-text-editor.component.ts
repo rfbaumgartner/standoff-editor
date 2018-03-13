@@ -20,7 +20,7 @@ export class PlainTextEditorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.text = this.textService.getText();
+    this.textService.getText().subscribe(res => this.text = res);
     this.resIRI = this.paramsService.getResourceIRI();
     this.projIRI = this.paramsService.getProjectIRI();
 
