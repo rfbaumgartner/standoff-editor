@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { ParamsService } from './params.service';
+import {Observable} from "rxjs/Observable";
+import {map} from "rxjs/operator/map";
 
 @Injectable()
 export class TextService {
@@ -44,13 +46,7 @@ export class TextService {
     this.text = text;
   }
 
-  getText(): string {
-    this.httpClient.get('http://localhost:3333/v2/resources/' + this.paramsService.getResourceIRI()).
-      subscribe(res => {
-        this.text = res['schema:itemListElement']['incunabula:description']['knora-api:valueAsString'];
-    });
-
-
-    return this.text;
+  getText() {
+    return this.httpClient.get('http://localhost:3333/v1/resources/' + this.paramsService.getResourceIRI());
   }
 }

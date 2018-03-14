@@ -18,8 +18,9 @@ export class StandoffListComponent implements OnInit, OnDestroy {
   constructor(private standoffService: StandoffService, private textService: TextService) { }
 
   ngOnInit() {
-    this.text = this.textService.getText();
-
+    this.textService.getText().subscribe(res => {
+      this.text = res['schema:itemListElement']['incunabula:description']['knora-api:valueAsString'];
+    });
     this.standoffSubscription = this.standoffService.getStandoffs()
       .subscribe((s: Array<Standoff>) => {
         this.standoff = s;
