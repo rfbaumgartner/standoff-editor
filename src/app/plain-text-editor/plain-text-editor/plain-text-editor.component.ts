@@ -1,3 +1,4 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ParamsService } from '../../core/params.service';
@@ -16,11 +17,18 @@ export class PlainTextEditorComponent implements OnInit {
 
   constructor(private textService: TextService,
               private paramsService: ParamsService,
-              private router: Router) {
+              private router: Router,
+  private httpClient: HttpClient) {
   }
 
   ngOnInit() {
-    this.text = this.textService.getText();
+    //this.text = this.textService.getText();
+
+    this.httpClient.get('http://localhost:3333/v2/resources/' + this.paramsService.getResourceIRI()).
+    subscribe(res => {
+      this.text = res['schema:itemListElement']['incunabula:description']['knora-api:valueAsString'];
+    });
+
     this.resIRI = this.paramsService.getResourceIRI();
     this.projIRI = this.paramsService.getProjectIRI();
 

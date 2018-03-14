@@ -15,7 +15,7 @@ export class ParamsService {
 
   setResource(alias: string) {
     this.resourceAlias = alias;
-    this.resourceIRI = 'TODO';
+    this.resourceIRI = alias;
   }
 
   getProjectIRI(): string {
