@@ -12,6 +12,7 @@ import { TextService } from '../../core/text.service';
 export class PlainTextEditorComponent implements OnInit {
 
   text: string;
+  textIRI: string;
   resIRI: string;
   projIRI: string;
 
@@ -23,6 +24,7 @@ export class PlainTextEditorComponent implements OnInit {
   ngOnInit() {
     this.textService.getText().subscribe(res => {
       this.text = res['schema:itemListElement']['incunabula:description']['knora-api:valueAsString'];
+      this.textIRI = res['schema:itemListElement']['incunabula:description']['@id'];
     });
     this.resIRI = this.paramsService.getResourceIRI();
     this.projIRI = this.paramsService.getProjectIRI();
@@ -33,50 +35,7 @@ export class PlainTextEditorComponent implements OnInit {
   }
 
   exitEditMode() {
-    this.textService.postText(this.text);
+    this.textService.putText(this.text, this.textIRI);
     this.router.navigate([ '/standoff' ]);
   }
-/*
-  const a = {
-    'res_id': 'http://rdfh.ch/anything/gLeKQE1BQVuxX0cxAjuYIw',
-    'results': {
-      'http://www.knora.org/ontology/knora-base#hasStillImageFileValue': [ {
-        'value': {
-          'dateval1': null,
-          'ival': null,
-          'dateprecision1': null,
-          'textval': { 'string': 'logo.jpg' },
-          'person_id': { 'string': 'http://rdfh.ch/users/root' },
-          'property_id': { 'string': 'http://www.knora.org/ontology/knora-base#hasStillImageFileValue' },
-          'calendar': null,
-          'timeval2': null,
-          'dval': null,
-          'dateval2': null,
-          'order': { 'integer': 1 },
-          'resource_id': { 'string': 'http://rdfh.ch/anything/gLeKQE1BQVuxX0cxAjuYIw' },
-          'timeval1': null,
-          'dateprecision2': null
-        }, 'id': 'http://rdfh.ch/anything/gLeKQE1BQVuxX0cxAjuYIw/values/KRinqOfHSi242ft8hcctpg'
-      }, {
-        'value': {
-          'dateval1': null,
-          'ival': null,
-          'dateprecision1': null,
-          'textval': { 'string': 'logo.jpg' },
-          'person_id': { 'string': 'http://rdfh.ch/users/root' },
-          'property_id': { 'string': 'http://www.knora.org/ontology/knora-base#hasStillImageFileValue' },
-          'calendar': null,
-          'timeval2': null,
-          'dval': null,
-          'dateval2': null,
-          'order': { 'integer': 1 },
-          'resource_id': { 'string': 'http://rdfh.ch/anything/gLeKQE1BQVuxX0cxAjuYIw' },
-          'timeval1': null,
-          'dateprecision2': null
-        }, 'id': 'http://rdfh.ch/anything/gLeKQE1BQVuxX0cxAjuYIw/values/DrhizGLiSXSVb4GJgno5og'
-      } ]
-    },
-    'status': 0
-  };
-*/
 }

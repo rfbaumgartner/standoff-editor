@@ -24,13 +24,11 @@ export class EditorComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.textService.getText().subscribe(res => this.text = res);
+    this.textService.getText().subscribe(res => {
+      this.text = res['schema:itemListElement']['incunabula:description']['knora-api:valueAsString'];
+    });
     this.resIRI = this.paramsService.getResourceIRI();
     this.projIRI = this.paramsService.getProjectIRI();
-
-    if (this.text === undefined) {
-      this.router.navigate(['/text']);
-    }
 
     if (this.projIRI === undefined || this.resIRI === undefined) {
       this.router.navigate(['/']);

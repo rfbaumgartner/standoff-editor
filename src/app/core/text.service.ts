@@ -2,13 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { ParamsService } from './params.service';
-import {Observable} from "rxjs/Observable";
-import {map} from "rxjs/operator/map";
 
 @Injectable()
 export class TextService {
-
-  private text: string;
 
   constructor(private httpClient: HttpClient,
               private authenticationService: AuthenticationService,
@@ -40,13 +36,34 @@ export class TextService {
         console.log('Error occured');
       }
     );
-
-
-    // here I would post the new text and get the new text
-    this.text = text;
   }
 
+  putText(text: string, textIRI: string) {
+
+    const resourceParams = {
+      'richtext_value': {'utf8str': text},
+      'comment': 'text' + Math.random() * 1000,
+      'project_id': this.paramsService.getProjectIRI()
+    };
+
+    const httpOptions = {
+      headers: new HttpHeaders(this.authenticationService.getAuthorization())
+    };
+
+    this.httpClient.put('http://localhost:3333/v1/values/' + encodeURIComponent(textIRI), resourceParams, httpOptions )
+      .subscribe(
+        res => {
+          console.log(res);
+          console.log(resourceParams);
+        },
+        err => {
+          console.log('Error occured');
+        }
+      );
+  }
+
+
   getText() {
-    return this.httpClient.get('http://localhost:3333/v1/resources/' + this.paramsService.getResourceIRI());
+    return this.httpClient.get('http://localhost:3333/v2/resources/' + this.paramsService.getResourceIRI());
   }
 }

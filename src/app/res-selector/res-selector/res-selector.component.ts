@@ -8,7 +8,7 @@ import { ParamsService } from '../../core/params.service';
 })
 export class ResSelectorComponent implements OnInit {
 
-  projectIRI: string = 'http://rdfh.ch/projects/anything';
+  projectIRI: string = 'http://rdfh.ch/projects/77275339';
   resourceAlias: string = 'http%3A%2F%2Fdata.knora.org%2F1c0d790e7801';
 
   GlobalResourceIRI: string;

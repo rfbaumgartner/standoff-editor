@@ -71,6 +71,7 @@ export class StandoffService {
   }
 
   getStandoffs(): Observable<Array<Standoff>> {
+    console.log(this.standoffSubject);
     return this.standoffSubject.asObservable();
   }
 
