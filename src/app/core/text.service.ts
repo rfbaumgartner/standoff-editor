@@ -1,10 +1,15 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { AuthenticationService } from './authentication.service';
 import { ParamsService } from './params.service';
 
+import 'rxjs/add/observable/of';
+
 @Injectable()
 export class TextService {
+
+  text: string;
 
   constructor(private httpClient: HttpClient,
               private authenticationService: AuthenticationService,
@@ -33,12 +38,14 @@ export class TextService {
         console.log(res);
       },
       err => {
-        console.log('Error occured');
+        console.log(err);
       }
     );
   }
 
   putText(text: string, textIRI: string) {
+
+    this.text = text;
 
     const resourceParams = {
       'richtext_value': {'utf8str': text},
@@ -54,16 +61,27 @@ export class TextService {
       .subscribe(
         res => {
           console.log(res);
-          console.log(resourceParams);
         },
         err => {
-          console.log('Error occured');
+          console.log(err);
         }
       );
   }
 
 
   getText() {
-    return this.httpClient.get('http://localhost:3333/v2/resources/' + this.paramsService.getResourceIRI());
+    // return this.httpClient.get('http://localhost:3333/v2/resources/' + this.paramsService.getResourceIRI());
+
+    // let res['schema:itemListElement']['incunabula:description']['knora-api:valueAsString'] = this.text;
+
+    const mockResource = {
+      'schema:itemListElement':
+      { 'incunabula:description':
+        { 'knora-api:valueAsString': this.text }
+      }
+    };
+
+    return Observable.of(mockResource);
+
   }
 }
